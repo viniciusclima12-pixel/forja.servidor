@@ -8,17 +8,17 @@ export default ({
         try {
 
 
-            const { nome, idade, cpf, genero, email } = request.body;
+            const { nome, descricao, duracao } = request.body;
 
-            if (!nome || !idade || !cpf || !email) {
+            if (!nome || !descricao || !duracao) {
                 return response.status(400).json({ error: 'Dados incompletos' });
             }
 
-            const aluno = await prisma.alunos.create({
-                data: { nome, idade, cpf, genero, email }
+            const cursos = await prisma.cursos.create({
+                data: { nome, descricao, duracao }
             });
 
-            return response.status(201).json(aluno);
+            return response.status(201).json(cursos);
         } catch (e) {
             return handleErrors(e, response);
         }
@@ -26,8 +26,8 @@ export default ({
 
     list: async (request: Request, response: Response) => {
         try {
-            const alunos = await prisma.alunos.findMany();
-            return response.status(200).json(alunos);
+            const cursos = await prisma.cursos.findMany();
+            return response.status(200).json(cursos);
         } catch (e) {
             return handleErrors(e, response);
         }
@@ -37,16 +37,16 @@ export default ({
         try {
             const { id } = request.params;
 
-            const aluno = await prisma.alunos.findUnique({
+            const cursos = await prisma.cursos.findUnique({
                 where: {
                     id: Number(id)
                 },
             });
-            if (!aluno) {
-                return response.status(404).json({ error: 'Aluno não encontrado' });
+            if (!cursos) {
+                return response.status(404).json({ error: 'cursos não encontrado' });
             }
 
-            return response.status(200).json(aluno);
+            return response.status(200).json(cursos);
         } catch (e) {
             return handleErrors(e, response);
         }
@@ -54,21 +54,19 @@ export default ({
     update: async (request: Request, response: Response) => {
         try {
             const { id } = request.params;
-            const { nome, idade, cpf, genero, email } = request.body;
+            const {nome, descricao, duracao, } = request.body;
 
-            const aluno = await prisma.alunos.update({
+            const cursos = await prisma.cursos.update({
                 where: {
                     id: Number(id)
                 },
                 data: {
                     nome,
-                    idade,
-                    cpf,
-                    genero,
-                    email
+                    descricao,
+                    duracao,
                 },
             });
-            return response.status(200).json(aluno);
+            return response.status(200).json(cursos);
         } catch (e) {
             return handleErrors(e, response);
         }
@@ -77,12 +75,12 @@ export default ({
         try {
             const { id } = request.params;
 
-            const aluno = await prisma.alunos.delete({
+            const cursos = await prisma.cursos.delete({
                 where: {
                     id: Number(id)
                 },
             });
-            return response.status(200).json(aluno);
+            return response.status(200).json(cursos);
 
         }catch (e) {
             return handleErrors(e, response);
